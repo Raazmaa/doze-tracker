@@ -173,11 +173,14 @@
     This just tracks timing — it isn't medical advice. Follow your doctor's or pharmacist's guidance on how much of each is safe for you.
     <br><br>
     <strong>Setup tip:</strong> your history now saves directly on this phone. Keep opening this same file (don't re-download a fresh copy each time, and avoid clearing Chrome's site data). In Chrome, tap the menu (⋮) → <strong>Add to Home screen</strong> to give it its own icon. Use "Export backup" now and then as extra insurance.
+    <br><br>
+    <strong>About alerts:</strong> for the most reliable background alerts, open Android Settings → Apps → Chrome (or whichever browser you installed this with) → Battery → set to <strong>Unrestricted</strong>. Even then, treat this as a helpful nudge, not a guaranteed alarm — for anything time-critical, keep a phone alarm as backup.
   </div>
 </div>
 
 <script>
 const STORAGE_KEY = 'tracker-data-v2';
+const NOTIFY_PREF_KEY = 'tracker-notify-v1';
 const PAIN_INTERVAL_MS = 4 * 60 * 60 * 1000;
 const VITC_INTERVAL_MS = 24 * 60 * 60 * 1000;
 const LABELS = { advil: 'Advil', tylenol: 'Tylenol', vitc: 'Vitamin C' };
@@ -187,6 +190,71 @@ let vitcLog = [];   // [{ drug: 'vitc', time: <ms epoch> }]
 let notifyEnabled = false;
 let lastNotifiedPain = null;
 let lastNotifiedVitc = null;
+let swRegistration = null;
+
+/* ---------- IndexedDB mirror (readable by the service worker) ---------- */
+const DB_NAME = 'tracker-db';
+const DB_STORE = 'kv';
+function idbOpen() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = () => { req.result.createObjectStore(DB_STORE); };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+async function idbSet(key, value) {
+  try {
+    const db = await idbOpen();
+    await new Promise((resolve, reject) => {
+      const tx = db.transaction(DB_STORE, 'readwrite');
+      tx.objectStore(DB_STORE).put(value, key);
+      tx.oncomplete = resolve;
+      tx.onerror = () => reject(tx.error);
+    });
+  } catch (e) { console.error('idbSet failed', e); }
+}
+
+/* ---------- service worker + background alerts ---------- */
+async function registerSW() {
+  if (!('serviceWorker' in navigator)) return null;
+  try {
+    swRegistration = await navigator.serviceWorker.register('sw.js');
+    await navigator.serviceWorker.ready;
+    return swRegistration;
+  } catch (e) {
+    console.error('Service worker registration failed:', e);
+    return null;
+  }
+}
+
+async function tryEnablePeriodicSync() {
+  if (!swRegistration || !('periodicSync' in swRegistration)) return false;
+  try {
+    const status = await navigator.permissions.query({ name: 'periodic-background-sync' });
+    if (status.state !== 'granted') return false;
+    await swRegistration.periodicSync.register('check-doses', { minInterval: 15 * 60 * 1000 });
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function fireNotification(title, body, tag) {
+  if (swRegistration) {
+    swRegistration.showNotification(title, { body, tag }).catch(() => {
+      try { new Notification(title, { body }); } catch (e) {}
+    });
+  } else {
+    try { new Notification(title, { body }); } catch (e) {}
+  }
+}
+
+async function resetNotifyState() {
+  lastNotifiedPain = null;
+  lastNotifiedVitc = null;
+  await idbSet('notifyState', { lastNotifiedPain: null, lastNotifiedVitc: null });
+}
 
 async function loadData() {
   try {
@@ -208,6 +276,8 @@ async function saveData() {
     console.error('Could not save data:', e);
     alert("Your browser blocked saving data. Use 'Export backup' regularly so you don't lose your history.");
   }
+  // Mirror into IndexedDB so the service worker can read it while the app isn't open.
+  await idbSet('data', { doseLog, vitcLog });
 }
 
 function otherDrug(d) { return d === 'advil' ? 'tylenol' : 'advil'; }
@@ -252,7 +322,7 @@ async function logDose(drug) {
     }
   }
   doseLog.push({ drug, time: Date.now() });
-  lastNotifiedPain = null;
+  await resetNotifyState();
   await saveData();
   renderAll();
 }
@@ -263,7 +333,7 @@ async function logVitC() {
     if (!confirm('You already logged Vitamin C recently today. Log again anyway?')) return;
   }
   vitcLog.push({ drug: 'vitc', time: Date.now() });
-  lastNotifiedVitc = null;
+  await resetNotifyState();
   await saveData();
   renderAll();
 }
@@ -279,6 +349,7 @@ async function undoLast() {
     if (!confirm('Remove the most recent Vitamin C entry?')) return;
     vitcLog.pop();
   }
+  await resetNotifyState();
   await saveData();
   renderAll();
 }
@@ -302,8 +373,7 @@ async function importData() {
     if (!confirm('This will replace your current history with the backup. Continue?')) return;
     doseLog = parsed.doseLog;
     vitcLog = parsed.vitcLog;
-    lastNotifiedPain = null;
-    lastNotifiedVitc = null;
+    await resetNotifyState();
     await saveData();
     renderAll();
     alert('Backup restored.');
@@ -316,18 +386,32 @@ async function resetAll() {
   if (!confirm("Clear your entire history? This can't be undone.")) return;
   doseLog = [];
   vitcLog = [];
-  lastNotifiedPain = null;
-  lastNotifiedVitc = null;
+  await resetNotifyState();
   await saveData();
   renderAll();
 }
 
 async function toggleNotifications() {
   if (!('Notification' in window)) { alert("This browser doesn't support notifications."); return; }
-  if (notifyEnabled) { notifyEnabled = false; renderAlertButton(); return; }
+  if (notifyEnabled) {
+    notifyEnabled = false;
+    localStorage.setItem(NOTIFY_PREF_KEY, 'off');
+    await idbSet('notifyEnabled', false);
+    renderAlertButton();
+    return;
+  }
   const perm = await Notification.requestPermission();
   notifyEnabled = perm === 'granted';
-  if (!notifyEnabled) alert('Notifications were blocked. You can still watch the countdown on screen.');
+  localStorage.setItem(NOTIFY_PREF_KEY, notifyEnabled ? 'on' : 'off');
+  await idbSet('notifyEnabled', notifyEnabled);
+  if (!notifyEnabled) {
+    alert('Notifications were blocked. You can still watch the countdown on screen.');
+  } else {
+    const gotBackgroundSync = await tryEnablePeriodicSync();
+    if (!gotBackgroundSync) {
+      alert("Alerts are on. One thing worth knowing: on Android, this only reliably fires while the app is open or recently backgrounded — not after it's been fully closed for a while. Keep it in your recent apps, and turn off battery optimization for your browser app in Android settings if you want it to check more consistently.");
+    }
+  }
   renderAlertButton();
 }
 
@@ -429,8 +513,9 @@ function tickPain() {
   nextLabel.textContent = overdue ? 'Overdue' : `${LABELS[nextDrug]} at ${fmtTime(dueTime)}`;
 
   if (overdue && notifyEnabled && lastNotifiedPain !== dueTime) {
-    try { new Notification('Time for your next dose', { body: `${LABELS[nextDrug]} is due now.` }); } catch (e) {}
+    fireNotification('Time for your next dose', `${LABELS[nextDrug]} is due now.`, 'pain-dose');
     lastNotifiedPain = dueTime;
+    idbSet('notifyState', { lastNotifiedPain: dueTime, lastNotifiedVitc });
   }
 }
 
@@ -472,8 +557,9 @@ function tickVitc() {
   nextLabel.textContent = overdue ? 'Overdue' : `Due ${fmtTime(dueTime)}`;
 
   if (overdue && notifyEnabled && lastNotifiedVitc !== dueTime) {
-    try { new Notification('Vitamin C reminder', { body: 'Your daily Vitamin C is due.' }); } catch (e) {}
+    fireNotification('Vitamin C reminder', 'Your daily Vitamin C is due.', 'vitc-dose');
     lastNotifiedVitc = dueTime;
+    idbSet('notifyState', { lastNotifiedPain, lastNotifiedVitc: dueTime });
   }
 }
 
@@ -485,7 +571,16 @@ function renderAll() {
 }
 
 (async function init() {
+  await registerSW();
   await loadData();
+
+  const storedPref = localStorage.getItem(NOTIFY_PREF_KEY);
+  if (storedPref === 'on' && 'Notification' in window && Notification.permission === 'granted') {
+    notifyEnabled = true;
+    await idbSet('notifyEnabled', true);
+    await tryEnablePeriodicSync();
+  }
+
   renderAlertButton();
   renderAll();
   setInterval(() => { tickPain(); tickVitc(); }, 1000);
