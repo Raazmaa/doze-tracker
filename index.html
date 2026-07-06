@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#EEF3EF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Dose Tracker</title>
+<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIkRvc2UgVHJhY2tlciIsICJzaG9ydF9uYW1lIjogIkRvc2VzIiwgInN0YXJ0X3VybCI6ICIuIiwgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNFRUYzRUYiLCAidGhlbWVfY29sb3IiOiAiI0VFRjNFRiIsICJpY29ucyI6IFt7InNyYyI6ICJkYXRhOmltYWdlL3BuZztiYXNlNjQsaVZCT1J3MEtHZ29BQUFBTlNVaEVVZ0FBQU1BQUFBREFDQVlBQUFCUzNHd0hBQUFFTjBsRVFWUjRuTzNkc1hIY1ZoaUZVU3hITTQ3b0diSUJSYXJCSFRoeDREcGNnR3B4RFZibURxelE3c1FKT1dNV1FBVWMwcFMwM0FVV0QvZ2ZjTStKRk8waXVCOGVkc2tSRDBObjdoN3VINnV2Z2VYY1h0OGNxcS9odGRLTE1YYUdvVGFLMWQvWTZEbGw3UmhXZXpQRFo0cTFRbGo4VFF5Zk9aWU9ZYkVYTjN4YVdpcUU1aTlxK0N5cGRRaFhMVi9NK0ZsYTY0MDFxY253cWREaU5KaDlBaGcvVlZwc2IxWUF4aysxdVJ1OE9BRGpweGR6dG5oUkFNWlBieTdkNU9RQWpKOWVYYkxOU1FFWVA3MmJ1dEhSQVJnL1d6RmxxNk1DTUg2Mlp1eG16d1pnL0d6Vm1PMDIvVlVJMkpxVEFiajdzM1huTnZ4bUFNYlBYcHphc2tjZ29oME53TjJmdlhscjAwNEFvbjBYZ0xzL2UzVnMyMDRBb24wVmdMcy9lL2Z0eHAwQVJIc0p3TjJmRksrMzdnUWdtZ0NJZGpVTUhuL0k4N3g1SndEUkJFQTBBUkJOQUVRNytBQk1NaWNBMFFSQU5BRVFUUUJFRXdEUkJFQTBBUkJOQUVRVEFORUVRRFFCRUUwQVJCTUEwUVJBTkFFUVRRQkVFd0RSQkVBMEFSQk5BRVFUQU5FRVFEUUJFRTBBUkJNQTBRUkFOQUVRVFFCRUV3RFJCRUEwQVJCTkFFUVRBTkVFUURRQkVFMEFSQk1BMFFSQU5BRVE3VjMxQlZ6cXY5OS9yYjZFSnY3OTY0ZnFTK2pHaHo4K3JmNmVtd3BnTDZPbkg5MEhzT2ZSdi8vNCtlLzNINS8rL2M4dlAvOVVleldadXY0TXNPZngwNGR1QXpCKzF0RGRJNURoczZhdVRnRGpaMjFkQlFCcjZ5WUFkMzhxZEJHQThWT2xQQURqcDFKNUFGQkpBRVFyRGNEakQ5V2NBRVFUQU5IS0F2RDRRdytjQUVRVEFORUVRRFFCRUUwQVJCTUEwUVJBdExJQWZ2enR6NnEzaGhkT0FLSUpnR2lsQVhnTW9wb1RnR2dDSUZwNUFCNkRxRlFld0RDSWdEcGRCREFNSXFCR053RkFoYTRDY0Fxd3RxNENHSWFuQ0lUQVdyb0w0SmtJV0VPM0FReURDRmplNGU3aC9ySDZJc2JhNC84azRhOUUvczlmaVR6ajlZbXd4eGhZMzZaT0FHaXQ2ODhBc0RRQkVFMEFSQk1BMFFSQU5BRVFUUUJFRXdEUkJFQTBBUkJOQUVRVEFORUVRRFFCRUUwQVJCTUEwUVJBTkFFUVRRQkVFd0RSQkVBMEFSQk5BRVFUQU5FRVFEUUJFRTBBUkJNQTBRUkFOQUVRVFFCRUV3RFJCRUEwQVJCTkFFUVRBTkVFUURRQkVFMEFSTHU2dmI0NVZGOEVWTGk5dmprNEFZZ21BS0lKZ0dnQ0lOclZNRHg5R0tpK0VGalQ4K2FkQUVRVEFORmVBdkFZUklyWFczY0NFTzJyQUp3QzdOMjNHM2NDRU8yN0FKd0M3Tld4YlRzQmlIWTBBS2NBZS9QV3BwMEFSSHN6QUtjQWUzRnF5eWRQQUJHd2RlYzI3QkdJYUdjRGNBcXdWV08yTytvRUVBRmJNM2F6b3grQlJNQldUTm5xcE04QUlxQjNVemM2K1VPd0NPalZKZHU4NkZzZ0VkQ2JTemQ1OGRlZ0lxQVhjN1k0NitjQUlxRGEzQTNPL2tHWUNLalNZbnROeDN2M2NQL1k4dlhnbUpZMzNhYS9DdUUwWUdtdE43YllZSjBHdExUVXpYWHhPN1lRbUdQcHA0clZIbG1Fd0JSclBVNnYvc3d1QkU1WiszTms2WWRXTVRBTXRWK2VkUGV0alNqMnJiZHZDcjhBL0lFQ2N6SjJCTUFBQUFBQVNVVk9SSzVDWUlJPSIsICJzaXplcyI6ICIxOTJ4MTkyIiwgInR5cGUiOiAiaW1hZ2UvcG5nIiwgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIn0sIHsic3JjIjogImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBZ0FBQUFJQUNBWUFBQUQwZU5UNkFBQU5WMGxFUVZSNG5PM2N2WTBjVnhxRjRScENnQ3dLSUJOWVN6RnNCdXVzb1RnVXdNYWlHQ1JQR1VpbU5oTTVKQ0FHUUJtREZwdGt6MHgzOWYzNWJwM25jUlpZcS9xT2NkNisxZUxEUmtudlByei9PUHNaQUZwNCsvck53K3huNEd2K0tKTVllSUJIQW1FT2h6NkFzUWU0alNqb3p3RjNZUEFCMmhJRTdUblFCZ3crd0ZpQzRINE9jQ2VqRDFDREdOakhvZDNBNkFQVUpnYXU1NkJlWVBRQjFpUUdudWR3bm1ENEFZNUJDRnptVU00WWZZQmpFd09mT0lqTjhBT2tFUUxoQVdENEFiSWxoMERrQnpmOEFKeExESUdvRDJ6NEFYaE9VZ2hFZkZEREQ4QXRFa0xnMWV3SDZNMzRBM0NyaE8wNGJPRWsvUEVBNk8rb3R3R0grMUNHSDRBZWpoWUNoM29GWVB3QjZPVm9HM09JbWpuYUh3V0EybzV3RzdEOERZRHhCMkMwSTJ6UDBnRndoRDhBQUd0YWZZT1d2TUpZL2RBQk9KWVZYd2tzZHdOZy9BR29ac1Z0V2lvQVZqeGdBREtzdGxGTFhGbXNkcWdBWkZ2aGxVRDVHd0RqRDhCcVZ0aXUwZ0d3d2dFQ3dDWFZONnhzQUZRL09BQjRTZVV0S3hrQWxROE1BRzVSZGRQS0JVRFZnd0tBdlNwdVc2a0FxSGhBQU5CQ3RZMHJFd0RWRGdZQVdxdTBkU1VDb05LQkFFQlBWVFp2ZWdCVU9RZ0FHS1hDOWswTmdBb0hBQUF6ek43QWFRRXcrNE1Ed0d3enQzQktBQmgvQUhnMGF4T0hCNER4QjREUHpkakdvUUZnL0FIZ3N0RWJPU3dBakQ4QVBHL2tWZzRKQU9NUEFOY1p0Wm5UL3gwQUFHQzg3Z0hnMno4QTNHYkVkbllOQU9NUEFQdjAzdEJ1QVdEOEFlQStQYmZVYndBQUlGQ1hBUER0SHdEYTZMV3B6UVBBK0FOQVd6MjJ0V2tBR0g4QTZLUDF4dm9OQUFBRWFoWUF2djBEUUY4dHQ3WkpBQmgvQUJpajFlWjZCUUFBZ2U0T0FOLytBV0NzRnR2ckJnQUFBdDBWQUw3OUE4QWM5Mjd3N2dBdy9nQXcxejFiN0JVQUFBVGFGUUMrL1FOQURYczMyUTBBQUFTNk9RQjgrd2VBV3Zac3N4c0FBQWgwVXdENDlnOEFOZDI2MFc0QUFDRFExUUhnMno4QTFIYkxWcnNCQUlCQVZ3V0FiLzhBc0lack45c05BQUFFRWdBQUVPakZBSEQ5RHdCcnVXYTczUUFBUUtCbkE4QzNmd0JZMDBzYjdnWUFBQUlKQUFBSTlHUUF1UDRIZ0xVOXQrVnVBQUFna0FBQWdFQVhBOEQxUHdBY3cxT2I3Z1lBQUFJSkFBQUk5RlVBdVA0SGdHTzV0TzF1QUFBZ2tBQUFnRUFDQUFBQ2ZSWUEzdjhEd0RGOXVmRnVBQUFna0FBQWdFQUNBQUFDL1JNQTN2OER3TEdkYjcwYkFBQUlKQUFBSUpBQUFJQkFBZ0FBQXIzYU5qOEFCSUFVcDgxM0F3QUFnUVFBQUFRU0FBQVFTQUFBUUNBQkFBQ0JCQUFBQkJJQUFCRG93YjhCQUFCNTNBQUFRQ0FCQUFDQkJBQUFCQklBQUJCSUFBQkFJQUVBQUlFRUFBQUVFZ0FBRUVnQUFFQWdBUUFBZ1FRQUFBUVNBQUFRU0FBQVFDQUJBQUNCQkFBQUJCSUFBQkJJQUFCQUlBRUFBSUVFQUFBRUVnQUFFRWdBQUVBZ0FRQUFnUVFBQUFRU0FBQVFTQUFBUUNBQkFBQ0JCQUFBQkJJQUFCQklBQUJBSUFFQUFJRUVBQUFFRWdBQUVFZ0FBRUFnQVFBQWdRUUFBQVFTQUFBUVNBQUFRQ0FCQUFDQkJBQUFCQklBQUJCSUFBQkFJQUVBQUlFRUFBQUVFZ0FBRUVnQUFFQWdBUUFBZ1FRQUFBUVNBQUFRU0FBQVFDQUJBQUNCQkFBQUJCSUFBQkJJQUFCQUlBRUFBSUVFQUFBRUVnQUFFRWdBQUVBZ0FRQUFnUVFBQUFRU0FBQVFTQUFBUUNBQkFBQ0JCQUFBQkJJQUFCQklBQUJBSUFFQUFJRUVBQUFFRWdBQUVFZ0FBRUFnQVFBQWdRUUFBQVFTQUFBUVNBQUFRQ0FCQUFDQkJBQUFCQklBQUJCSUFBQkFJQUVBQUlFRUFBQUVFZ0FBRUVnQUFFQWdBUUFBZ1FRQUFBUVNBQUFRU0FBQVFDQUJBQUNCQkFBQUJCSUFBQkJJQUFCQUlBRUFBSUVFQUFBRUVnQUFFRWdBQUVBZ0FRQUFnUVFBQUFRU0FBQVFTQUFBUUNBQkFBQ0JCQUFBQkJJQUFCQklBQUJBb0c5bVB3QnovUFhURDdNZmdRTCsvTzNiMlk4QXUzMy84eSt6SDJGcEFpQ0FzUWZnU3dMZ2dBdytML25YLzM3LzQvRi9QLzEvLy8vdmYvNDk2M21BOFFUQVFSaDlBRzRoQUJabitBSFlRd0FzeXZBRGNBOEJzQmpERDBBTEFtQVJoaCtBbHZ4RFFBc3cvZ0MwNWdhZ01NTVBRQzl1QUlveS9nRDBKQUFLTXY0QTlPWVZRQ0dHSDRCUjNBQVVZZndCR0VrQUZHRDhBUmhOQUV4bS9BR1lRUUJNWlB3Qm1FVUFUR0w4QVpoSkFFeGcvQUdZVFFBQVFDQUJNSmh2L3dCVUlBQUdNdjRBVkNFQUJqSCtBRlFpQUFBZ2tBQVl3TGQvQUtvUkFKMFpmd0FxRWdBQUVFZ0FkT1RiUHdCVkNRQUFDQ1FBT3ZIdEg0REtCQUFBQkJJQUhmajJEMEIxQWdBQUFnbUF4bno3QjJBRkFnQUFBZ2tBQUFna0FCcHkvUS9BS2dRQUFBUVNBQUFRU0FBQVFDQUIwSWozL3dDc1JBQUFRQ0FCQUFDQkJBQUFCQklBQUJCSUFEVGdCNEFBckVZQUFFQWdBUUFBZ1FRQUFBUVNBQUFRU0FBQVFDQUJBQUNCQkFBQUJCSUFBQkJJQUFCQUlBRUFBSUVFQUFBRUVnQUFFRWdBQUVBZ0FkREFkei8rT3ZzUkFPQW1BZ0FBQWdrQUFBZ2tBQUFna0FBQWdFQUNvQkUvQkFSZ0pRSUFBQUlKQUFBSUpBQUFJSkFBYU1qdkFBQlloUUFBZ0VBQ0FBQUNDWURHdkFZQVlBVUNBQUFDQ1lBTzNBSUFVSjBBQUlCQUFxQVR0d0FBVkNZQUFDQ1FBT2pJTFFBQVZRa0FBQWdrQURwekN3QkFSUUpnQUJFQVFEVUNBQUFDQ1lCQjNBSUFVSWtBR0VnRUFGQ0ZBQmhNQkFCUWdRQUFnRUFDWUFLM0FBRE1KZ0FtRVFFQXpDUUFKaElCQU13aUFDWVRBUURNSUFBS0VBRUFqQ1lBaWhBQkFJd2tBQXI1N3NkZmhRQUFRd2lBZ2tRQUFMMEpnS0pFQUFBOUNZREN2QklBb0JjQnNBQVJBRUJyQW1BUmJnTUFhRWtBTEVZSUFOQ0NBRmlVRUFEZ0hnSmdjVUlBZ0QyK21mMEF0SEVlQVgvOTlNUEVKd0ZnQlEvdlByei9PUHNoNkVzUThKUS9mL3QyOWlQQWJ0Ly8vTXZzUjFpYUc0QUFsMTRSaUFLQWJHNEFBQ0NRSHdFQ1FDQUJBQUNCQkFBQUJCSUFBQkJJQUFCQUlBRUFBSUVFQUFBRUVnQUFFRWdBQUVBZ0FRQUFnUVFBQUFRU0FBQVFTQUFBUUNBQkFBQ0JCQUFBQkJJQUFCQklBQUJBSUFFQUFJRUVBQUFFRWdBQUVFZ0FBRUFnQVFBQWdRUUFBQVFTQUFBUVNBQUFRQ0FCQUFDQkJBQUFCQklBQUJCSUFBQkFJQUVBQUlFRUFBQUVFZ0FBRUVnQUFFQWdBUUFBZ1FRQUFBUVNBQUFRU0FBQVFDQUJBQUNCQkFBQUJCSUFBQkJJQUFCQUlBRUFBSUVFQUFBRUVnQUFFRWdBQUVBZ0FRQUFnUVFBQUFRU0FBQVFTQUFBUUNBQkFBQ0JCQUFBQkJJQUFCQklBQUJBSUFFQUFJRUVBQUFFRWdBQUVFZ0FBRUFnQVFBQWdRUUFBQVFTQUFBUVNBQUFRQ0FCQUFDQkJBQUFCQklBQUJCSUFBQkFJQUVBQUlFRUFBQUVFZ0FBRUVnQUFFQWdBUUFBZ1FRQUFBUVNBQUFRU0FBQVFDQUJBQUNCQkFBQUJCSUFBQkJJQUFCQUlBRUFBSUVFQUFBRUVnQUFFRWdBQUVBZ0FRQUFnUVFBQUFRU0FBQVFTQUFBUUNBQkFBQ0JCQUFBQkJJQUFCQklBQUJBSUFFQUFJRUVBQUFFRWdBQUVFZ0FBRUFnQVFBQWdRUUFBQVFTQUFBUVNBQUFRQ0FCQUFDQkJBQUFCQklBQUJCSUFBQkFvRmR2WDc5NW1QMFFBTUE0YjErL2VYQURBQUNCQkFBQUJCSUFBQkJJQUFCQUlBRUFBSUVFQUFBRUVnQUFFT2pWdGozKzk0Q3pId1FBNk8rMCtXNEFBQ0NRQUFDQVFBSUFBQUlKQUFBSTlFOEErQ0VnQUJ6YitkYTdBUUNBUUFJQUFBSUpBQUFJOUZrQStCMEFBQnpUbHh2dkJnQUFBZ2tBQUFna0FBQWcwRmNCNEhjQUFIQXNsN2JkRFFBQUJCSUFBQkRvWWdCNERRQUF4L0RVcHJzQkFJQkFBZ0FBQWowWkFGNERBTURhbnR0eU53QUFFRWdBQUVDZ1p3UEFhd0FBV05OTEcrNEdBQUFDdlJnQWJnRUFZQzNYYkxjYkFBQUlKQUFBSU5CVkFlQTFBQUNzNGRyTmRnTUFBSUd1RGdDM0FBQlEyeTFiN1FZQUFBTGRGQUJ1QVFDZ3BsczMyZzBBQUFTNk9RRGNBZ0JBTFh1MjJRMEFBQVRhRlFCdUFRQ2docjJiN0FZQUFBTHREZ0MzQUFBdzF6MWJmTmNOZ0FnQWdEbnUzV0N2QUFBZzBOMEI0QllBQU1acXNiMXVBQUFnVUpNQWNBc0FBR08wMnR4bU53QWlBQUQ2YXJtMVhnRUFRS0NtQWVBV0FBRDZhTDJ4elc4QVJBQUF0TlZqVzd1OEFoQUJBTkJHcjAzMUd3QUFDTlF0QU53Q0FNQjllbTVwMXhzQUVRQUErL1RlME82dkFFUUFBTnhteEhiNkRRQUFCQm9TQUc0QkFPQTZvelp6MkEyQUNBQ0E1NDNjeXFHdkFFUUFBRncyZWlPSC93WkFCQURBNTJaczQ1UWZBWW9BQUhnMGF4T24vVmNBSWdDQWRETzNjT3AvQmlnQ0FFZzFld09uL3pzQXN3OEFBRWFyc0gzVEEyRGJhaHdFQUl4UVpmTktCTUMyMVRrUUFPaWwwdGFWQ1lCdHEzVXdBTkJTdFkwckZRRGJWdStBQU9CZUZiZXRYQUJzVzgyREFvQTlxbTVheVFEWXRyb0hCZ0RYcXJ4bFpRTmcyMm9mSEFBOHAvcUdsUTZBYmF0L2dBRHdwUlcycS93RG5udjM0ZjNIMmM4QUFFOVpZZmhQeXQ4QW5GdnBZQUhJc3RwR0xSVUEyN2JlQVFOd2ZDdHUwM0lQZk00ckFRQm1Xbkg0VDVhN0FUaTM4c0VEc0xiVk4yanBBTmkyOWY4QUFLem5DTnV6L0FjNDU1VUFBRDBkWWZoUGxyOEJPSGVrUHd3QXRSeHRZdzcxWWM2NURRQ2doYU1OLzhraFA5UTVJUURBSGtjZC9wTkR2UUs0NU9oL1FBRGFTOWlPdzMvQWMyNERBSGhPd3ZDZnhIelFjMElBZ0hOSnczOFM5NEhQQ1FHQWJJbkRmeEw3d2M4SkFZQXN5Y04vRW44QTU0UUF3TEVaL2s4Y3hCUEVBTUF4R1AzTEhNb0xoQURBbWd6Lzh4ek9EY1FBUUcxRy8zb09haWN4QUZDRDBkL0hvVFVnQmdER012cjNjNEFkQ0FLQXRneCtldzUwQUVFQWNCdUQzNThEbmtRVUFEd3k5bk00OUtJRUFuQVVCcjZtdndGNDA0MllRcWlMVmdBQUFBQkpSVTVFcmtKZ2dnPT0iLCAic2l6ZXMiOiAiNTEyeDUxMiIsICJ0eXBlIjogImltYWdlL3BuZyIsICJwdXJwb3NlIjogImFueSBtYXNrYWJsZSJ9XX0=">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEN0lEQVR4nO3dsXHcVhiFUSxHM47oGbIBRarBHThx4DpcgGpxDVbmDqzQ7sQJOWMWQAUc0pS03AUWD/gfcM+JFO0iuB8edskRD0Nn7h7uH6uvgeXcXt8cqq/htdKLMXaGoTaK1d/Y6Dll7RhWezPDZ4q1Qlj8TQyfOZYOYbEXN3xaWiqE5i9q+CypdQhXLV/M+Fla6401qcnwqdDiNJh9Ahg/VVpsb1YAxk+1uRu8OADjpxdztnhRAMZPby7d5OQAjJ9eXbLNSQEYP72butHRARg/WzFlq6MCMH62ZuxmzwZg/GzVmO02/VUI2JqTAbj7s3XnNvxmAMbPXpzaskcgoh0NwN2fvXlr004Aon0XgLs/e3Vs204Aon0VgLs/e/ftxp0ARHsJwN2fFK+37gQgmgCIdjUMHn/I87x5JwDRBEA0ARBNAEQ7+ABMMicA0QRANAEQTQBEEwDRBEA0ARBNAEQTANEEQDQBEE0ARBMA0QRANAEQTQBEEwDRBEA0ARBNAEQTANEEQDQBEE0ARBMA0QRANAEQTQBEEwDRBEA0ARBNAEQTANEEQDQBEE0ARBMA0QRANAEQ7V31BVzqv99/rb6EJv7964fqS+jGhz8+rf6emwpgL6OnH90HsOfRv//4+e/3H5/+/c8vP/9UezWZuv4MsOfx04duAzB+1tDdI5Dhs6auTgDjZ21dBQBr6yYAd38qdBGA8VOlPADjp1J5AFBJAEQrDcDjD9WcAEQTANHKAvD4Qw+cAEQTANEEQDQBEE0ARBMA0QRAtLIAfvztz6q3hhdOAKIJgGilAXgMopoTgGgCIFp5AB6DqFQewDCIgDpdBDAMIqBGNwFAha4CcAqwtq4CGIanCITAWroL4JkIWEO3AQyDCFje4e7h/rH6Isba4/8k4a9E/s9fiTzj9YmwxxhY36ZOAGit688AsDQBEE0ARBMA0QRANAEQTQBEEwDRBEA0ARBNAEQTANEEQDQBEE0ARBMA0QRANAEQTQBEEwDRBEA0ARBNAEQTANEEQDQBEE0ARBMA0QRANAEQTQBEEwDRBEA0ARBNAEQTANEEQDQBEE0ARLu6vb45VF8EVLi9vjk4AYgmAKIJgGgCINrVMDx9GKi+EFjT8+adAEQTANFeAvAYRIrXW3cCEO2rAJwC7N23G3cCEO27AJwC7NWxbTsBiHY0AKcAe/PWpp0ARHszAKcAe3FqyydPABGwdec27BGIaGcDcAqwVWO2O+oEEAFbM3azox+BRMBWTNnqpM8AIqB3Uzc6+UOwCOjVJdu86FsgEdCbSzd58degIqAXc7Y46+cAIqDa3A3O/kGYCKjSYntNx3v3cP/Y8vXgmJY33aa/CuE0YGmtN7bYYJ0GtLTUzXXxO7YQmGPpp4rVHlmEwBRrPU6v/swuBE5Z+3Nk6YdWMTAMtV+edPetjSj2rbdvCr8A/IECczJ2BMAAAAAASUVORK5CYII=">
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEN0lEQVR4nO3dsXHcVhiFUSxHM47oGbIBRarBHThx4DpcgGpxDVbmDqzQ7sQJOWMWQAUc0pS03AUWD/gfcM+JFO0iuB8edskRD0Nn7h7uH6uvgeXcXt8cqq/htdKLMXaGoTaK1d/Y6Dll7RhWezPDZ4q1Qlj8TQyfOZYOYbEXN3xaWiqE5i9q+CypdQhXLV/M+Fla6401qcnwqdDiNJh9Ahg/VVpsb1YAxk+1uRu8OADjpxdztnhRAMZPby7d5OQAjJ9eXbLNSQEYP72butHRARg/WzFlq6MCMH62ZuxmzwZg/GzVmO02/VUI2JqTAbj7s3XnNvxmAMbPXpzaskcgoh0NwN2fvXlr004Aon0XgLs/e3Vs204Aon0VgLs/e/ftxp0ARHsJwN2fFK+37gQgmgCIdjUMHn/I87x5JwDRBEA0ARBNAEQ7+ABMMicA0QRANAEQTQBEEwDRBEA0ARBNAEQTANEEQDQBEE0ARBMA0QRANAEQTQBEEwDRBEA0ARBNAEQTANEEQDQBEE0ARBMA0QRANAEQTQBEEwDRBEA0ARBNAEQTANEEQDQBEE0ARBMA0QRANAEQ7V31BVzqv99/rb6EJv7964fqS+jGhz8+rf6emwpgL6OnH90HsOfRv//4+e/3H5/+/c8vP/9UezWZuv4MsOfx04duAzB+1tDdI5Dhs6auTgDjZ21dBQBr6yYAd38qdBGA8VOlPADjp1J5AFBJAEQrDcDjD9WcAEQTANHKAvD4Qw+cAEQTANEEQDQBEE0ARBMA0QRAtLIAfvztz6q3hhdOAKIJgGilAXgMopoTgGgCIFp5AB6DqFQewDCIgDpdBDAMIqBGNwFAha4CcAqwtq4CGIanCITAWroL4JkIWEO3AQyDCFje4e7h/rH6Isba4/8k4a9E/s9fiTzj9YmwxxhY36ZOAGit688AsDQBEE0ARBMA0QRANAEQTQBEEwDRBEA0ARBNAEQTANEEQDQBEE0ARBMA0QRANAEQTQBEEwDRBEA0ARBNAEQTANEEQDQBEE0ARBMA0QRANAEQTQBEEwDRBEA0ARBNAEQTANEEQDQBEE0ARLu6vb45VF8EVLi9vjk4AYgmAKIJgGgCINrVMDx9GKi+EFjT8+adAEQTANFeAvAYRIrXW3cCEO2rAJwC7N23G3cCEO27AJwC7NWxbTsBiHY0AKcAe/PWpp0ARHszAKcAe3FqyydPABGwdec27BGIaGcDcAqwVWO2O+oEEAFbM3azox+BRMBWTNnqpM8AIqB3Uzc6+UOwCOjVJdu86FsgEdCbSzd58degIqAXc7Y46+cAIqDa3A3O/kGYCKjSYntNx3v3cP/Y8vXgmJY33aa/CuE0YGmtN7bYYJ0GtLTUzXXxO7YQmGPpp4rVHlmEwBRrPU6v/swuBE5Z+3Nk6YdWMTAMtV+edPetjSj2rbdvCr8A/IECczJ2BMAAAAAASUVORK5CYII=">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #EEF3EF;
+    --card: #FFFFFF;
+    --ink: #1B2B27;
+    --muted: #6E7C77;
+    --hairline: #E1E9E4;
+    --advil: #E08A3E;
+    --advil-soft: #FBEADA;
+    --tylenol: #C94A45;
+    --tylenol-soft: #FBE3E1;
+    --vitc: #3FA796;
+    --vitc-soft: #DFF2EE;
+    --ok: #2F8F6E;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+  }
+  body { display: flex; justify-content: center; padding: 0 0 40px; }
+  .screen { width: 100%; max-width: 430px; min-height: 100vh; background: var(--bg); padding: 28px 20px 20px; }
+  .eyebrow { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 2px; }
+  h1 { font-family: 'Space Grotesk', sans-serif; font-size: 26px; margin: 0 0 22px; letter-spacing: -0.01em; }
+  .section-label { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 600; color: var(--muted); margin: 26px 0 10px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .section-label:first-of-type { margin-top: 0; }
+
+  .status-card { background: var(--card); border-radius: 22px; padding: 26px 22px 22px; box-shadow: 0 12px 30px rgba(27, 43, 39, 0.06); margin-bottom: 14px; }
+  .status-label { font-size: 13px; color: var(--muted); font-weight: 500; margin-bottom: 6px; }
+  .status-main { display: flex; align-items: baseline; gap: 10px; margin-bottom: 18px; }
+  .status-drug { font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700; }
+  .status-drug.advil { color: var(--advil); }
+  .status-drug.tylenol { color: var(--tylenol); }
+  .status-drug.vitc { color: var(--vitc); }
+  .status-time { font-size: 15px; color: var(--muted); font-weight: 500; }
+  .status-main.overdue .status-drug { animation: blink 1.4s ease-in-out infinite; }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+  .capsule-track { position: relative; height: 22px; border-radius: 999px; background: var(--hairline); overflow: hidden; }
+  .capsule-fill { position: absolute; top: 0; left: 0; bottom: 0; width: 0%; border-radius: 999px; transition: width 0.6s ease; }
+  .capsule-seam { position: absolute; top: 3px; bottom: 3px; width: 2px; background: rgba(255,255,255,0.6); left: 50%; }
+  .capsule-track.single .capsule-seam { display: none; }
+  .capsule-caption { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: var(--muted); font-weight: 500; }
+
+  .log-buttons { display: flex; flex-direction: column; gap: 12px; margin-bottom: 6px; }
+  .log-btn { display: flex; align-items: center; gap: 14px; border: none; border-radius: 16px; padding: 16px 18px; font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 600; cursor: pointer; text-align: left; transition: transform 0.12s ease, box-shadow 0.12s ease; color: var(--ink); }
+  .log-btn:active { transform: scale(0.98); }
+  .log-btn .dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+  .log-btn.recommended { box-shadow: 0 8px 20px rgba(27,43,39,0.1); border: 2px solid transparent; }
+  .log-btn.advil-btn { background: var(--advil-soft); }
+  .log-btn.advil-btn .dot { background: var(--advil); }
+  .log-btn.advil-btn.recommended { border-color: var(--advil); }
+  .log-btn.tylenol-btn { background: var(--tylenol-soft); }
+  .log-btn.tylenol-btn .dot { background: var(--tylenol); }
+  .log-btn.tylenol-btn.recommended { border-color: var(--tylenol); }
+  .log-btn.vitc-btn { background: var(--vitc-soft); }
+  .log-btn.vitc-btn .dot { background: var(--vitc); }
+  .log-btn .sub { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .alert-row { display: flex; align-items: center; justify-content: space-between; background: var(--card); border-radius: 16px; padding: 14px 18px; margin: 20px 0 8px; font-size: 14px; font-weight: 500; gap: 10px; }
+  .alert-row span { flex: 1; }
+  .alert-row button { border: none; background: var(--ink); color: var(--bg); padding: 8px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; cursor: pointer; flex-shrink: 0; }
+  .alert-row button.on { background: var(--ok); }
+
+  .history-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .history-head h2 { font-family: 'Space Grotesk', sans-serif; font-size: 16px; margin: 0; }
+  .history-head a { font-size: 13px; color: var(--muted); font-weight: 600; cursor: pointer; text-decoration: underline; }
+  .day-group { margin-bottom: 14px; }
+  .day-heading { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 6px 4px; }
+  .history-list { display: flex; flex-direction: column; gap: 8px; }
+  .history-item { display: flex; align-items: center; gap: 12px; background: var(--card); border-radius: 14px; padding: 12px 16px; font-size: 14px; }
+  .history-item .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .history-item .drug-name { font-weight: 600; }
+  .history-item .when { margin-left: auto; color: var(--muted); font-size: 13px; }
+  .empty-note { text-align: center; color: var(--muted); font-size: 14px; padding: 20px 10px; background: var(--card); border-radius: 14px; }
+
+  .footer-note { margin-top: 26px; font-size: 12.5px; line-height: 1.5; color: var(--muted); text-align: center; padding: 0 6px; }
+  .reset-link { display: block; text-align: center; margin-top: 14px; font-size: 12.5px; color: var(--muted); text-decoration: underline; cursor: pointer; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="eyebrow">Advil ⇄ Tylenol · Vitamin C</div>
+  <h1>Dose Tracker</h1>
+
+  <div class="section-label">Pain relief rotation</div>
+  <div class="status-card">
+    <div class="status-label" id="statusLabel">Loading…</div>
+    <div class="status-main" id="statusMain">
+      <span class="status-drug" id="statusDrug">—</span>
+      <span class="status-time" id="statusTime"></span>
+    </div>
+    <div class="capsule-track">
+      <div class="capsule-fill" id="capsuleFill"></div>
+      <div class="capsule-seam"></div>
+    </div>
+    <div class="capsule-caption">
+      <span id="lastLabel">Last dose</span>
+      <span id="nextLabel">Next dose</span>
+    </div>
+  </div>
+
+  <div class="log-buttons" id="logButtons">
+    <button class="log-btn advil-btn" id="advilBtn" onclick="logDose('advil')">
+      <span class="dot"></span> Log Advil now
+      <span class="sub" id="advilSub"></span>
+    </button>
+    <button class="log-btn tylenol-btn" id="tylenolBtn" onclick="logDose('tylenol')">
+      <span class="dot"></span> Log Tylenol now
+      <span class="sub" id="tylenolSub"></span>
+    </button>
+  </div>
+
+  <div class="section-label">Daily Vitamin C</div>
+  <div class="status-card">
+    <div class="status-label" id="vitcStatusLabel">Loading…</div>
+    <div class="status-main" id="vitcStatusMain">
+      <span class="status-drug vitc" id="vitcStatusDrug">—</span>
+      <span class="status-time" id="vitcStatusTime"></span>
+    </div>
+    <div class="capsule-track single">
+      <div class="capsule-fill" id="vitcCapsuleFill"></div>
+    </div>
+    <div class="capsule-caption">
+      <span id="vitcLastLabel">Last taken</span>
+      <span id="vitcNextLabel">Next due</span>
+    </div>
+  </div>
+  <div class="log-buttons">
+    <button class="log-btn vitc-btn" id="vitcBtn" onclick="logVitC()">
+      <span class="dot"></span> Log Vitamin C now
+      <span class="sub" id="vitcSub"></span>
+    </button>
+  </div>
+
+  <div class="alert-row">
+    <span id="alertText">Get an alert when a dose is due</span>
+    <button id="alertBtn" onclick="toggleNotifications()">Turn on</button>
+  </div>
+
+  <div class="history-head">
+    <h2>History</h2>
+    <a onclick="undoLast()" id="undoLink" style="display:none;">Undo last entry</a>
+  </div>
+  <div id="historyContainer">
+    <div class="empty-note">Nothing logged yet.</div>
+  </div>
+
+  <div style="display:flex; justify-content:center; gap:18px; margin-top:14px;">
+    <span class="reset-link" onclick="exportData()">Export backup</span>
+    <span class="reset-link" onclick="importData()">Restore backup</span>
+    <span class="reset-link" onclick="resetAll()">Clear all</span>
+  </div>
+
+  <div class="footer-note">
+    This just tracks timing — it isn't medical advice. Follow your doctor's or pharmacist's guidance on how much of each is safe for you.
+    <br><br>
+    <strong>Setup tip:</strong> your history now saves directly on this phone. Keep opening this same file (don't re-download a fresh copy each time, and avoid clearing Chrome's site data). In Chrome, tap the menu (⋮) → <strong>Add to Home screen</strong> to give it its own icon. Use "Export backup" now and then as extra insurance.
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'tracker-data-v2';
+const PAIN_INTERVAL_MS = 4 * 60 * 60 * 1000;
+const VITC_INTERVAL_MS = 24 * 60 * 60 * 1000;
+const LABELS = { advil: 'Advil', tylenol: 'Tylenol', vitc: 'Vitamin C' };
+
+let doseLog = [];   // [{ drug: 'advil'|'tylenol', time: <ms epoch> }]
+let vitcLog = [];   // [{ drug: 'vitc', time: <ms epoch> }]
+let notifyEnabled = false;
+let lastNotifiedPain = null;
+let lastNotifiedVitc = null;
+
+async function loadData() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      doseLog = parsed.doseLog || [];
+      vitcLog = parsed.vitcLog || [];
+    }
+  } catch (e) {
+    console.error('Could not load saved data:', e);
+  }
+}
+
+async function saveData() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ doseLog, vitcLog }));
+  } catch (e) {
+    console.error('Could not save data:', e);
+    alert("Your browser blocked saving data. Use 'Export backup' regularly so you don't lose your history.");
+  }
+}
+
+function otherDrug(d) { return d === 'advil' ? 'tylenol' : 'advil'; }
+function getLastPain() { return doseLog.length ? doseLog[doseLog.length - 1] : null; }
+function getLastVitc() { return vitcLog.length ? vitcLog[vitcLog.length - 1] : null; }
+function getNextPainDrug() { const l = getLastPain(); return l ? otherDrug(l.drug) : null; }
+
+function fmtTime(ms) {
+  return new Date(ms).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+}
+function isSameDay(a, b) {
+  const da = new Date(a), db = new Date(b);
+  return da.getFullYear() === db.getFullYear() && da.getMonth() === db.getMonth() && da.getDate() === db.getDate();
+}
+function dayHeading(ms) {
+  const now = Date.now();
+  if (isSameDay(ms, now)) return 'Today';
+  if (isSameDay(ms, now - 86400000)) return 'Yesterday';
+  return new Date(ms).toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+}
+function fmtFull(ms) {
+  return `${dayHeading(ms)} · ${fmtTime(ms)}`;
+}
+function fmtDuration(ms) {
+  const abs = Math.abs(ms);
+  const h = Math.floor(abs / 3600000);
+  const m = Math.floor((abs % 3600000) / 60000);
+  if (h > 0) return `${h}h ${m}m`;
+  return `${m}m`;
+}
+
+async function logDose(drug) {
+  const nextExpected = getNextPainDrug();
+  if (nextExpected && drug !== nextExpected) {
+    if (!confirm(`You logged ${LABELS[otherDrug(drug)]} last. Log ${LABELS[drug]} anyway?`)) return;
+  }
+  const last = getLastPain();
+  if (last) {
+    const due = last.time + PAIN_INTERVAL_MS;
+    if (Date.now() < due) {
+      if (!confirm(`That's ${fmtDuration(due - Date.now())} earlier than your usual 4-hour gap. Log it anyway?`)) return;
+    }
+  }
+  doseLog.push({ drug, time: Date.now() });
+  lastNotifiedPain = null;
+  await saveData();
+  renderAll();
+}
+
+async function logVitC() {
+  const last = getLastVitc();
+  if (last && (Date.now() - last.time) < 20 * 3600000) {
+    if (!confirm('You already logged Vitamin C recently today. Log again anyway?')) return;
+  }
+  vitcLog.push({ drug: 'vitc', time: Date.now() });
+  lastNotifiedVitc = null;
+  await saveData();
+  renderAll();
+}
+
+async function undoLast() {
+  const lastPain = getLastPain();
+  const lastVitc = getLastVitc();
+  if (!lastPain && !lastVitc) return;
+  if (lastPain && (!lastVitc || lastPain.time > lastVitc.time)) {
+    if (!confirm('Remove the most recent pain-relief entry?')) return;
+    doseLog.pop();
+  } else {
+    if (!confirm('Remove the most recent Vitamin C entry?')) return;
+    vitcLog.pop();
+  }
+  await saveData();
+  renderAll();
+}
+
+async function exportData() {
+  const payload = JSON.stringify({ doseLog, vitcLog }, null, 0);
+  try {
+    await navigator.clipboard.writeText(payload);
+    alert('Backup copied to clipboard. Paste it into a Note or message to yourself to keep it safe.');
+  } catch (e) {
+    prompt('Copy this text and save it somewhere safe:', payload);
+  }
+}
+
+async function importData() {
+  const text = prompt('Paste your backup text here to restore it:');
+  if (!text) return;
+  try {
+    const parsed = JSON.parse(text);
+    if (!Array.isArray(parsed.doseLog) || !Array.isArray(parsed.vitcLog)) throw new Error('bad shape');
+    if (!confirm('This will replace your current history with the backup. Continue?')) return;
+    doseLog = parsed.doseLog;
+    vitcLog = parsed.vitcLog;
+    lastNotifiedPain = null;
+    lastNotifiedVitc = null;
+    await saveData();
+    renderAll();
+    alert('Backup restored.');
+  } catch (e) {
+    alert("That doesn't look like a valid backup — nothing was changed.");
+  }
+}
+
+async function resetAll() {
+  if (!confirm("Clear your entire history? This can't be undone.")) return;
+  doseLog = [];
+  vitcLog = [];
+  lastNotifiedPain = null;
+  lastNotifiedVitc = null;
+  await saveData();
+  renderAll();
+}
+
+async function toggleNotifications() {
+  if (!('Notification' in window)) { alert("This browser doesn't support notifications."); return; }
+  if (notifyEnabled) { notifyEnabled = false; renderAlertButton(); return; }
+  const perm = await Notification.requestPermission();
+  notifyEnabled = perm === 'granted';
+  if (!notifyEnabled) alert('Notifications were blocked. You can still watch the countdown on screen.');
+  renderAlertButton();
+}
+
+function renderAlertButton() {
+  const btn = document.getElementById('alertBtn');
+  const txt = document.getElementById('alertText');
+  btn.textContent = notifyEnabled ? 'On' : 'Turn on';
+  btn.classList.toggle('on', notifyEnabled);
+  txt.textContent = notifyEnabled ? "You'll get an alert when a dose is due" : 'Get an alert when a dose is due';
+}
+
+function renderHistory() {
+  const container = document.getElementById('historyContainer');
+  const undoLink = document.getElementById('undoLink');
+  const all = [...doseLog, ...vitcLog].sort((a, b) => b.time - a.time);
+  if (!all.length) {
+    container.innerHTML = '<div class="empty-note">Nothing logged yet.</div>';
+    undoLink.style.display = 'none';
+    return;
+  }
+  undoLink.style.display = 'inline';
+
+  const groups = [];
+  let currentKey = null, currentGroup = null;
+  all.forEach(entry => {
+    const key = dayHeading(entry.time);
+    if (key !== currentKey) {
+      currentGroup = { heading: key, items: [] };
+      groups.push(currentGroup);
+      currentKey = key;
+    }
+    currentGroup.items.push(entry);
+  });
+
+  container.innerHTML = groups.map(g => `
+    <div class="day-group">
+      <div class="day-heading">${g.heading}</div>
+      <div class="history-list">
+        ${g.items.map(entry => `
+          <div class="history-item">
+            <span class="dot" style="background:var(--${entry.drug})"></span>
+            <span class="drug-name">${LABELS[entry.drug]}</span>
+            <span class="when">${fmtTime(entry.time)}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderButtons() {
+  const nextDrug = getNextPainDrug();
+  const advilBtn = document.getElementById('advilBtn');
+  const tylenolBtn = document.getElementById('tylenolBtn');
+  advilBtn.classList.toggle('recommended', nextDrug === 'advil' || nextDrug === null);
+  tylenolBtn.classList.toggle('recommended', nextDrug === 'tylenol' || nextDrug === null);
+  document.getElementById('advilSub').textContent = (nextDrug === 'advil' || nextDrug === null) ? 'Next up' : '';
+  document.getElementById('tylenolSub').textContent = (nextDrug === 'tylenol' || nextDrug === null) ? 'Next up' : '';
+}
+
+function tickPain() {
+  const last = getLastPain();
+  const statusLabel = document.getElementById('statusLabel');
+  const statusMain = document.getElementById('statusMain');
+  const statusDrug = document.getElementById('statusDrug');
+  const statusTime = document.getElementById('statusTime');
+  const fill = document.getElementById('capsuleFill');
+  const lastLabel = document.getElementById('lastLabel');
+  const nextLabel = document.getElementById('nextLabel');
+
+  if (!last) {
+    statusLabel.textContent = 'Get started';
+    statusDrug.textContent = 'Log your first dose';
+    statusDrug.className = 'status-drug';
+    statusTime.textContent = '';
+    statusMain.classList.remove('overdue');
+    fill.style.width = '0%';
+    fill.style.background = 'var(--hairline)';
+    lastLabel.textContent = 'No history yet';
+    nextLabel.textContent = '4h after you log one';
+    return;
+  }
+
+  const nextDrug = otherDrug(last.drug);
+  const dueTime = last.time + PAIN_INTERVAL_MS;
+  const now = Date.now();
+  const pct = Math.min(100, ((now - last.time) / PAIN_INTERVAL_MS) * 100);
+  const overdue = now >= dueTime;
+
+  statusLabel.textContent = overdue ? 'Due now' : 'Next dose in';
+  statusDrug.textContent = overdue ? `${LABELS[nextDrug]} is due` : LABELS[nextDrug];
+  statusDrug.className = 'status-drug ' + nextDrug;
+  statusTime.textContent = overdue ? `since ${fmtFull(dueTime)}` : `${fmtDuration(dueTime - now)} · ${fmtTime(dueTime)}`;
+  statusMain.classList.toggle('overdue', overdue);
+
+  fill.style.width = pct + '%';
+  fill.style.background = `var(--${nextDrug})`;
+  lastLabel.textContent = `${LABELS[last.drug]} · ${fmtFull(last.time)}`;
+  nextLabel.textContent = overdue ? 'Overdue' : `${LABELS[nextDrug]} at ${fmtTime(dueTime)}`;
+
+  if (overdue && notifyEnabled && lastNotifiedPain !== dueTime) {
+    try { new Notification('Time for your next dose', { body: `${LABELS[nextDrug]} is due now.` }); } catch (e) {}
+    lastNotifiedPain = dueTime;
+  }
+}
+
+function tickVitc() {
+  const last = getLastVitc();
+  const statusLabel = document.getElementById('vitcStatusLabel');
+  const statusMain = document.getElementById('vitcStatusMain');
+  const statusDrug = document.getElementById('vitcStatusDrug');
+  const statusTime = document.getElementById('vitcStatusTime');
+  const fill = document.getElementById('vitcCapsuleFill');
+  const lastLabel = document.getElementById('vitcLastLabel');
+  const nextLabel = document.getElementById('vitcNextLabel');
+
+  if (!last) {
+    statusLabel.textContent = 'Get started';
+    statusDrug.textContent = 'Log today\'s Vitamin C';
+    statusTime.textContent = '';
+    statusMain.classList.remove('overdue');
+    fill.style.width = '0%';
+    fill.style.background = 'var(--hairline)';
+    lastLabel.textContent = 'No history yet';
+    nextLabel.textContent = '24h after you log it';
+    return;
+  }
+
+  const dueTime = last.time + VITC_INTERVAL_MS;
+  const now = Date.now();
+  const pct = Math.min(100, ((now - last.time) / VITC_INTERVAL_MS) * 100);
+  const overdue = now >= dueTime;
+
+  statusLabel.textContent = overdue ? 'Due now' : 'Next dose in';
+  statusDrug.textContent = overdue ? 'Vitamin C is due' : 'Vitamin C';
+  statusTime.textContent = overdue ? `since ${fmtFull(dueTime)}` : `${fmtDuration(dueTime - now)} · ${fmtTime(dueTime)}`;
+  statusMain.classList.toggle('overdue', overdue);
+
+  fill.style.width = pct + '%';
+  fill.style.background = 'var(--vitc)';
+  lastLabel.textContent = `Taken ${fmtFull(last.time)}`;
+  nextLabel.textContent = overdue ? 'Overdue' : `Due ${fmtTime(dueTime)}`;
+
+  if (overdue && notifyEnabled && lastNotifiedVitc !== dueTime) {
+    try { new Notification('Vitamin C reminder', { body: 'Your daily Vitamin C is due.' }); } catch (e) {}
+    lastNotifiedVitc = dueTime;
+  }
+}
+
+function renderAll() {
+  renderButtons();
+  renderHistory();
+  tickPain();
+  tickVitc();
+}
+
+(async function init() {
+  await loadData();
+  renderAlertButton();
+  renderAll();
+  setInterval(() => { tickPain(); tickVitc(); }, 1000);
+})();
+</script>
+</body>
+</html>
