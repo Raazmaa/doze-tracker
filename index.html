@@ -93,6 +93,9 @@
 
   .footer-note { margin-top: 26px; font-size: 12.5px; line-height: 1.5; color: var(--muted); text-align: center; padding: 0 6px; }
   .reset-link { display: block; text-align: center; margin-top: 14px; font-size: 12.5px; color: var(--muted); text-decoration: underline; cursor: pointer; }
+  .alarm-btn { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; margin-top: 12px; border: 1.5px solid var(--hairline); background: transparent; color: var(--ink); padding: 10px 14px; border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .alarm-btn:active { transform: scale(0.98); }
+  .alarm-btn[hidden] { display: none; }
 </style>
 </head>
 <body>
@@ -115,6 +118,7 @@
       <span id="lastLabel">Last dose</span>
       <span id="nextLabel">Next dose</span>
     </div>
+    <button class="alarm-btn" id="painAlarmBtn" hidden onclick="setPhoneAlarmForPain()">⏰ Set phone alarm for this</button>
   </div>
 
   <div class="log-buttons" id="logButtons">
@@ -142,6 +146,7 @@
       <span id="vitcLastLabel">Last taken</span>
       <span id="vitcNextLabel">Next due</span>
     </div>
+    <button class="alarm-btn" id="vitcAlarmBtn" hidden onclick="setPhoneAlarmForVitc()">⏰ Set phone alarm for this</button>
   </div>
   <div class="log-buttons">
     <button class="log-btn vitc-btn" id="vitcBtn" onclick="logVitC()">
@@ -254,6 +259,32 @@ async function resetNotifyState() {
   lastNotifiedPain = null;
   lastNotifiedVitc = null;
   await idbSet('notifyState', { lastNotifiedPain: null, lastNotifiedVitc: null });
+}
+
+/* ---------- hand off to the real Android alarm clock ---------- */
+// Uses Android's SET_ALARM intent, which only Chrome/WebView on Android can
+// invoke from a web page. It opens the phone's default Clock app pre-filled
+// at the right time; the user still taps Save. That alarm then rings through
+// silent mode/DND like any normal alarm, which a browser notification cannot.
+let painAlarmDue = null, painAlarmLabel = '';
+let vitcAlarmDue = null, vitcAlarmLabel = '';
+
+function setPhoneAlarm(dueTimeMs, label) {
+  const d = new Date(dueTimeMs);
+  const hour = d.getHours();
+  const minute = d.getMinutes();
+  const url = `intent:#Intent;action=android.intent.action.SET_ALARM;i.android.intent.extra.alarm.HOUR=${hour};i.android.intent.extra.alarm.MINUTES=${minute};S.android.intent.extra.alarm.MESSAGE=${encodeURIComponent(label)};end`;
+  try {
+    window.location.href = url;
+  } catch (e) {
+    alert("Couldn't open the alarm clock app. This button only works in Chrome on Android.");
+  }
+}
+function setPhoneAlarmForPain() {
+  if (painAlarmDue) setPhoneAlarm(painAlarmDue, `${painAlarmLabel} dose`);
+}
+function setPhoneAlarmForVitc() {
+  if (vitcAlarmDue) setPhoneAlarm(vitcAlarmDue, vitcAlarmLabel);
 }
 
 async function loadData() {
@@ -492,6 +523,7 @@ function tickPain() {
     fill.style.background = 'var(--hairline)';
     lastLabel.textContent = 'No history yet';
     nextLabel.textContent = '4h after you log one';
+    document.getElementById('painAlarmBtn').hidden = true;
     return;
   }
 
@@ -511,6 +543,10 @@ function tickPain() {
   fill.style.background = `var(--${nextDrug})`;
   lastLabel.textContent = `${LABELS[last.drug]} · ${fmtFull(last.time)}`;
   nextLabel.textContent = overdue ? 'Overdue' : `${LABELS[nextDrug]} at ${fmtTime(dueTime)}`;
+
+  painAlarmDue = dueTime;
+  painAlarmLabel = LABELS[nextDrug];
+  document.getElementById('painAlarmBtn').hidden = false;
 
   if (overdue && notifyEnabled && lastNotifiedPain !== dueTime) {
     fireNotification('Time for your next dose', `${LABELS[nextDrug]} is due now.`, 'pain-dose');
@@ -538,6 +574,7 @@ function tickVitc() {
     fill.style.background = 'var(--hairline)';
     lastLabel.textContent = 'No history yet';
     nextLabel.textContent = '24h after you log it';
+    document.getElementById('vitcAlarmBtn').hidden = true;
     return;
   }
 
@@ -555,6 +592,10 @@ function tickVitc() {
   fill.style.background = 'var(--vitc)';
   lastLabel.textContent = `Taken ${fmtFull(last.time)}`;
   nextLabel.textContent = overdue ? 'Overdue' : `Due ${fmtTime(dueTime)}`;
+
+  vitcAlarmDue = dueTime;
+  vitcAlarmLabel = 'Vitamin C';
+  document.getElementById('vitcAlarmBtn').hidden = false;
 
   if (overdue && notifyEnabled && lastNotifiedVitc !== dueTime) {
     fireNotification('Vitamin C reminder', 'Your daily Vitamin C is due.', 'vitc-dose');
