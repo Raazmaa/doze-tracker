@@ -55,6 +55,8 @@ async function checkDoses() {
       await self.registration.showNotification('Time for your next dose', {
         body: `${LABELS[otherDrug(lastPain.drug)]} is due now.`,
         tag: 'pain-dose',
+        requireInteraction: true,
+        vibrate: [300, 150, 300, 150, 300],
       });
       state.lastNotifiedPain = due;
       changed = true;
@@ -68,6 +70,8 @@ async function checkDoses() {
       await self.registration.showNotification('Vitamin C reminder', {
         body: 'Your daily Vitamin C is due.',
         tag: 'vitc-dose',
+        requireInteraction: true,
+        vibrate: [300, 150, 300, 150, 300],
       });
       state.lastNotifiedVitc = due;
       changed = true;
